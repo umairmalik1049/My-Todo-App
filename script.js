@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.classList.add("task-checkbox");
-    checkbox.checked = checked;
+    checkbox.checked = checked; // Set checkbox state based on saved status
 
     const textNode = document.createElement("span");
     textNode.classList.add("task-text");
@@ -75,6 +75,12 @@ document.addEventListener("DOMContentLoaded", () => {
   taskInput.addEventListener("keypress", (event) => {
     if (event.key === "Enter") {
       addTaskBtn.click();
+    }
+  });
+
+  taskList.addEventListener("change", (event) => {
+    if (event.target.classList.contains("task-checkbox")) {
+      saveTasks(); // Save tasks when checkbox state changes
     }
   });
 
