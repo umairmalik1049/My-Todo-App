@@ -12,9 +12,11 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  overflow: hidden; /* Prevent scrolling on the body */
 }
 
 .container {
+  margin-top: 2rem;
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
@@ -22,6 +24,10 @@ body {
   max-width: 500px;
   padding: 20px;
   animation: animate__animated animate__fadeIn;
+  overflow: hidden; /* Hide overflow inside the container */
+  max-height: 90vh; /* Set a maximum height for the container */
+  display: flex;
+  flex-direction: column;
 }
 
 h1 {
@@ -61,52 +67,8 @@ h1 {
 
 .task-list {
   list-style: none;
-}
-
-.task-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
-  font-size: 1rem;
-  color: #333;
-  transition: background-color 0.3s ease;
-}
-
-.task-item:hover {
-  background-color: #f0f0f0;
-}
-
-.task-item button {
-  background: #dc3545;
-  color: #fff;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  display: flex;
-  align-items: center;
-}
-
-.task-item button:hover {
-  background: #c82333;
-}
-
-.task-item i {
-  margin-right: 5px;
-}
-
-/* Responsive styling */
-@media (max-width: 600px) {
-  .input-section {
-    flex-direction: column;
-  }
-
-  #addTaskBtn {
-    width: 100%;
-  }
+  max-height: 60vh; /* Set a maximum height for the task list */
+  overflow-y: auto; /* Add vertical scroll when content overflows */
 }
 
 .task-item {
@@ -124,12 +86,11 @@ h1 {
 }
 
 .task-item input[type="checkbox"] {
-  margin-right: 10px;
-  cursor: pointer;
+  margin-right: 15px; /* Adjust spacing between checkbox and text */
 }
 
 .task-item .task-text {
-  flex: 1;
+  flex: 1; /* Take up available space */
 }
 
 .task-item button {

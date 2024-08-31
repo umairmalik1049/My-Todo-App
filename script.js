@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const addTaskBtn = document.getElementById("addTaskBtn");
   const taskList = document.getElementById("taskList");
 
-  function createTaskItem(taskText) {
+  function createTaskItem(taskText, checked = false) {
     const listItem = document.createElement("li");
     listItem.classList.add("task-item", "animate__animated", "animate__fadeIn");
     listItem.draggable = true; // Enable dragging
@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.classList.add("task-checkbox");
+    checkbox.checked = checked;
 
     const textNode = document.createElement("span");
     textNode.classList.add("task-text");
@@ -20,7 +21,10 @@ document.addEventListener("DOMContentLoaded", () => {
     removeBtn.innerHTML = '<i class="fas fa-trash"></i> Remove';
     removeBtn.addEventListener("click", () => {
       listItem.classList.add("animate__fadeOut");
-      setTimeout(() => taskList.removeChild(listItem), 300); // Match animation duration
+      setTimeout(() => {
+        taskList.removeChild(listItem);
+        saveTasks(); // Save tasks after removal
+      }, 300); // Match animation duration
     });
 
     listItem.appendChild(checkbox);
@@ -38,17 +42,34 @@ document.addEventListener("DOMContentLoaded", () => {
     return listItem;
   }
 
+  function saveTasks() {
+    const tasks = [];
+    document.querySelectorAll(".task-item").forEach((item) => {
+      const taskText = item.querySelector(".task-text").textContent;
+      const isChecked = item.querySelector(".task-checkbox").checked;
+      tasks.push({ text: taskText, checked: isChecked });
+    });
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }
+
+  function loadTasks() {
+    const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    tasks.forEach((task) => {
+      const listItem = createTaskItem(task.text, task.checked);
+      taskList.appendChild(listItem);
+    });
+  }
+
   addTaskBtn.addEventListener("click", () => {
     const taskText = taskInput.value.trim();
-
     if (taskText === "") {
       return;
     }
 
     const listItem = createTaskItem(taskText);
     taskList.appendChild(listItem);
-
     taskInput.value = "";
+    saveTasks(); // Save tasks after adding a new one
   });
 
   taskInput.addEventListener("keypress", (event) => {
@@ -66,6 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       taskList.insertBefore(draggingItem, afterElement);
     }
+    saveTasks(); // Save tasks after drag and drop
   });
 
   function getDragAfterElement(container, y) {
@@ -86,4 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
       { offset: Number.NEGATIVE_INFINITY }
     ).element;
   }
+
+  // Load tasks on page load
+  loadTasks();
 });
